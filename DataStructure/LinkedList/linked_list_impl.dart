@@ -50,9 +50,22 @@ class LinkList {
     return null;
   }
 
-  void insertAfter({pointerData, data}) {
-    LinkListNode newNode = LinkListNode(data);
-    LinkListNode? node = find(pointerData);
+  LinkListNode? findParent(data) {
+    if (isEmpty()) {
+      print('linkedList is Empty');
+    } else {
+      for (var itrr = this.begin(); itrr.current() != null; itrr.next()) {
+        if (data == itrr.next().data()) {
+          return itrr.current();
+        }
+      }
+    }
+    return null;
+  }
+
+  void insertAfter({nodeData, newData}) {
+    LinkListNode newNode = LinkListNode(newData);
+    LinkListNode? node = find(nodeData);
     if (node != null) {
       if (node.next == null) {
         node.next = newNode;
@@ -64,7 +77,23 @@ class LinkList {
       tail?.next = newNode;
     }
   }
-  
+
+  void insertBefore({node, data}) {
+    LinkListNode newNode = LinkListNode(data);
+    LinkListNode? parent = findParent(node);
+    if (parent != null) {
+      if (parent.next == null) {
+        parent.next = newNode;
+        return;
+      }
+      newNode.next = parent.next;
+      parent.next = newNode;
+    } else {
+      newNode.next = head;
+      head = newNode;
+    }
+  }
+
 }
 
 void main(List<String> args) {
@@ -74,6 +103,15 @@ void main(List<String> args) {
   newList.insert(value: 4);
   newList.insert(value: 6);
   newList.insert(value: 8);
-  newList.insertAfter(pointerData: 10, data: 80, );
+  newList.insertAfter(
+    nodeData: 10,
+    newData: 80,
+  );
+  newList.printLin();
+  print('-----------------------');
+  newList.insertBefore(
+    node: 80,
+    data: 75,
+  );
   newList.printLin();
 }
